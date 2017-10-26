@@ -34,8 +34,7 @@ $appPermission1 = New-Object -TypeName "Microsoft.Open.AzureAD.Model.ResourceAcc
 
 $reqGraphTwo.ResourceAccess = $appPermission1
 
-$permissions = New-Object 'System.Collections.Generic.List[[Microsoft.Open.AzureAD.Model.RequiredResourceAccess, Microsoft.Open.AzureAD16.Graph.Client, Version=2.0.0.0, Culture=neutral, PublicKey
-Token=null]]'
+$permissions = New-Object 'System.Collections.Generic.List[Microsoft.Open.AzureAD.Model.RequiredResourceAccess]'
 
 $permissions.Add($reqGraph)
 $permissions.Add($reqGraphTwo)
@@ -70,6 +69,7 @@ Write-Output $requiredResourceAccess
 Write-Output "Make sure to have downloaded the correct dependencies and modules"
 # $controllerAddress = Read-Host -Prompt "Input controller address. Please include port if one exists. Example: 127.0.0.1:8000"
 
+$appObjectId = Read-Host -Prompt "What is the object id for the Azure Active Directory Application you will be linking to the controller?" 
 Write-Output "Using Service Principal ObjectID is $appObjectId"
 
 $app = Get-AzureADApplication -ObjectId $appObjectId
@@ -82,8 +82,8 @@ Write-Output $app.RequiredResourceAccess
 Write-Output "This is the type of requiredresourceaccess"
 Write-Output $app.RequiredResourceAccess.GetType().fullname
 
-# $arraysMatch = @(Compare-Object $app.RequiredResourceAccess $requiredResourceAccess).Length -eq 0
-# Write-Output "Does the requiredResourceAccess Match? $arraysMatch"
+$arraysMatch = @(Compare-Object $app.RequiredResourceAccess $permissions).Length -eq 0
+Write-Output "Does the requiredResourceAccess Match? $arraysMatch"
 
 ##############
 # Reply URLs #
